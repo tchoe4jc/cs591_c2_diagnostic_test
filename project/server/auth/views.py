@@ -8,6 +8,15 @@ from project.server.models import User
 
 auth_blueprint = Blueprint('auth', __name__)
 
+
+class ViewAPI(MethodView):
+    """
+    View All Users
+    """
+
+    def get(self):
+        return jsonify(User.return_all())
+
 class RegisterAPI(MethodView):
     """
     User Registration Resource
@@ -59,10 +68,18 @@ class RegisterAPI(MethodView):
 
 # define the API resources
 registration_view = RegisterAPI.as_view('register_api')
+view_users = ViewAPI.as_view('view_api')
 
 # add Rules for API Endpoints
 auth_blueprint.add_url_rule(
     '/auth/register',
     view_func=registration_view,
     methods=['POST', 'GET']
+)
+
+# add users route to see all users
+auth_blueprint.add_url_rule(
+    '/users/index',
+    view_func=view_users,
+    methods = ['GET']
 )

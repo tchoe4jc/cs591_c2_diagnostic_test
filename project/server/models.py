@@ -22,6 +22,15 @@ class User(db.Model):
         self.registered_on = datetime.datetime.now()
         self.admin = admin
 
+    @classmethod
+    def return_all(cls):
+        def to_json(x):
+            return {
+                'email': x.email,
+                'password': x.password
+                }
+        return {'users': list(map(lambda x: to_json(x), User.query.all()))}
+
     def encode_auth_token(self, user_id):
         """
         Generates the Auth Token
